@@ -2,19 +2,22 @@ import React, {useState} from "react";
 import {collection,updateDoc,doc}from '@firebase/firestore';
 import  { useEffect } from 'react';
 import { firestore } from "../../Firebase";
-import { useLocation } from 'react-router-dom';
+import { useLocation,useNavigate } from 'react-router-dom';
 
 
 export default function Index() {
-  const [title, setTitle] = useState('');
-  const [amount, setAmount] = useState(0);
-  const [date, setDate] = useState('');
-  const [msg, setmsg] = useState('');
-const [documentId,setdocumentId]=useState('');
   const location = useLocation();
+  const navigate= useNavigate();
+
+  const [title, setTitle] = useState(location.state.title);
+  const [amount, setAmount] = useState(location.state.amount);
+  const [date, setDate] = useState(location.state.date);
+  const [msg, setmsg] = useState('');
+const [documentId,setdocumentId]=useState(location.state.id);
+
   const dataFromPreviousRoute = location.state;
   console.log(dataFromPreviousRoute);
-
+{/*
   useEffect(()=>{
     setTitle(dataFromPreviousRoute.title);
     setAmount(dataFromPreviousRoute.amount);
@@ -22,14 +25,15 @@ const [documentId,setdocumentId]=useState('');
     setdocumentId(dataFromPreviousRoute.id);
 
   },[]);
+*/}
 
   const handleSubmit= async (e) => {
     e.preventDefault();
     setmsg('');
 
     try {
-      const dataCollection = collection(firestore,'title');
-      const documentRef = doc(dataCollection, documentId);
+       const dataCollection =  collection(firestore,'title');
+       const documentRef = doc(dataCollection, documentId);
 
             const newItemData = {
         title: title,
@@ -40,13 +44,16 @@ const [documentId,setdocumentId]=useState('');
       await updateDoc(documentRef, newItemData);
 
       setmsg('Item update successfully');
+      navigate('/');
+      
     } catch (error) {
       console.error('Error adding item:', error);
     }
   };
-
+console.log('updatepage');
   
   return (
+
     <>
         <div className=" flex justify-center flex-col place-items-center">
         <p className="text-2xl text-blue-500">Update Expense</p>

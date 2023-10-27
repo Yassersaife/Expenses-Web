@@ -4,12 +4,11 @@ import { firestore } from "./../../Firebase";
 import { collection, getDocs } from '@firebase/firestore';
 
 export default function Index() {
-  const [monthlyTotalss, setmonthlyTotalss] = useState([]);
   const [data, setData] = useState([]);
 
   const [totalValue, setTotalValue] = useState(0);
-  const [minAmount, setMinAmount] = useState(null);
-  const [maxAmount, setMaxAmount] = useState(null);
+  const [minAmount, setMinAmount] = useState(0);
+  const [maxAmount, setMaxAmount] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -20,8 +19,8 @@ export default function Index() {
           id: doc.id,
           ...doc.data(),
         }));
-        setData(dataArray);
-        setmonthlyTotalss(dataArray);
+         setData(dataArray);
+         console.log('data',data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -33,24 +32,28 @@ export default function Index() {
   useEffect(() => {
     const total = data.reduce((accumulator, currentValue) => accumulator + parseInt(currentValue.amount,10), 0);
     setTotalValue(total);
-
+       
     const amounts = data.map((item) => item.amount);
     setMaxAmount(Math.max(...amounts));
     setMinAmount(Math.min(...amounts));
   }, [data]);
 
-
+console.log('render')
   return (
     <>
       <div className="body grid grid-cols-1 place-items-center">
         <p className='sm:p-8 md:p-4 text-2xl lg:text-center '>Monthly Expenses</p>
 
-        <div className='lg:text-center sm:w-3/6 '>
-          <Chart month={monthlyTotalss} />
+        <div className='w-3/5  sm:w-min items-center content-center container '>
+          {data.length === 0 ? 
+          (<div className='text-indigo-700	text-center'> Loading...</div>):
+          
+          ( <Chart month={data} />)   }
+         
         </div>
         <div className='lg:text-start my-10 '>
           <p className='sm:p-8 my-8 text-xl lg:text-start text-indigo-900'>Summary</p>
-          <div class="grid grid-cols-2 sm:gap6 lg:gap-24">
+          <div class="grid grid-cols-1 gap-6 lg:grid-cols-2  lg:gap-20">
             <div className='flex-1 flex-col border-2 border-indigo-500 justify-center items-center border-collapse px-10 py-5 gap-5 rounded-lg shadow hover:bg-indigo-500'>
               <p className='sm:p-8 md:p-4 text-xl lg:text-center text-red-800 '>Total</p>
               <h1 className='sm:p-8 md:p-4 text-x lg:text-center tx '>{totalValue} $</h1>

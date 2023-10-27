@@ -10,7 +10,7 @@ export default function index() {
                 <img className='h-14 w-14 lg:ml-80 cursor-pointer ' src={Logo} alt="" />
             </div>
             <div className=''>
-               <User2  size={40} className='border cursor-pointer border-black rounded-xl lg:ml-80'/>
+               <User2  size={40} className='border cursor-pointer bg-blue-300 border-black rounded-full lg:ml-80'/>
             </div>
         </div>
     </div>

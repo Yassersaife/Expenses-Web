@@ -13,9 +13,12 @@ export default function Index() {
   const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
-   
+   console.log('useeffect')
     fetchData();
-  }, []);
+    return()=>{
+console.log('yasser')
+    }
+  },[]);
 
   const fetchData = async () => {
     try {
@@ -25,14 +28,12 @@ export default function Index() {
 
       const dataArray = querySnapshot.docs.map((doc) => ({
         id: doc.id, 
-
         ...doc.data(),
       }));
 
       setData(dataArray);
       setSearchResults(dataArray);
 
-      console.log(data)
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -52,33 +53,39 @@ export default function Index() {
   
 
   const navigate= useNavigate();
+  console.log('render');
   return (
     <>
     <div className="body grid grid-cols-1  place-items-center">
     <p className='sm:p-8 md:p-4 text-xl lg:text-center '>Expenses List</p>
     <div className='lg:text-start'>
-    <input type="text" placeholder='search'  value={searchQuery}   onChange={(e) =>{ 
+
+    <input  type="text" placeholder='search'  value={searchQuery}   
+    
+    onChange={(e) =>{ 
     setSearchQuery(e.target.value);
     const filteredData = data.filter((item) =>
       item.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
     setSearchResults(filteredData);
+                  }
     }
-  }
 
-   className='border rounded-xl  items-start p-2 px-20 text-start focus:bg-slate-100' name="" id="" />
+   className='border rounded-xl   p-2 px-20 text-start focus:bg-slate-100' name="" id="" />
     </div>
 
     <div className=''>
-  {searchQuery.trim() === '' ? (
-    data.map((item, index) => (
-      <Expense key={index} item={item} handleDelet={handleDelet} />
-    ))
-  ) : (
+  {searchQuery ?   (
     searchResults.map((item, index) => (
       <Expense key={index} item={item} handleDelet={handleDelet} />
     ))
-  )}
+  ):(
+    data.map((item, index) => (
+      <Expense key={index} item={item} handleDelet={handleDelet} />
+    ))
+  )
+  
+  }
 </div>
     <div>
     <PlusCircle size={50} onClick={()=>{
@@ -89,7 +96,6 @@ export default function Index() {
     </div>
 
     </div>
-    
     </>
   )
 }

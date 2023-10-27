@@ -11,7 +11,7 @@ export default function index() {
           
         </div>
         <div>
-          <Link to="/analyze" className='p-4 border-2 font-medium border-indigo-300	 rounded-2xl   hover:bg-black  hover:text-white  ' href="/analyze">Analyze Expenses</Link>
+          <Link to="/analyze" className='p-4 border-2 font-medium border-indigo-300	 rounded-2xl   hover:bg-black  hover:text-white  ' >Analyze Expenses</Link>
         </div>
       </div>
 
